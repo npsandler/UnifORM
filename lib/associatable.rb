@@ -1,4 +1,4 @@
-require_relative '02_searchable'
+require_relative 'searchable'
 require 'byebug'
 require 'active_support/inflector'
 

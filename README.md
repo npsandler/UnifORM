@@ -14,13 +14,9 @@ CREATE TABLE players (
   FOREIGN KEY(team_id) REFERENCES team(id)
 );
 ```
-Once the Player model was connected to the players tabe, it would be able to call Player#name and Player#name=(new_name).
+Once the Player class was connected to the players tabe, it would be able to call `Player#name` and `Player#name=(new_name)`.
 
-
-
-UnifORM was built as a simple solution for object-relational mapping. The prime directive for this mapping has been to minimize the amount of code needed to build a real-world domain model. This is made possible by relying on a number of conventions that make it easy for Active Record to infer complex relations and structures from a minimal amount of explicit direction.
-
-
+Once relationships have been set up on the Class level, Users can call associations on instances including `has_many`, `belongs_to`, and `has_one_through`
 
 ```ruby
 def belongs_to(name, options = {})
@@ -35,3 +31,23 @@ def belongs_to(name, options = {})
     .first
 end
 ```
+They can also query the database using Ruby with intuitive library methods like `.find` and `.where`
+
+```ruby
+def where(params)
+  keys = params.keys.map { |key| "#{key} = ?" }.join(' AND ')
+  vals = params.values
+  result = DBConnection.execute(<<-SQL, *vals)
+    SELECT
+      *
+    FROM
+      #{table_name}
+    WHERE
+      #{keys}
+  SQL
+  result.map { |hash| self.new(hash) }
+end
+```
+
+
+UnifORM was built as a simple solution for object-relational mapping. The main goal for the project is to minimize the amount of code needed to build a real-world domain model.

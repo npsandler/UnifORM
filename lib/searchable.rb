@@ -16,7 +16,3 @@ module Searchable
     result.map { |hash| self.new(hash) }
   end
 end
-
-class SQLObject
-  extend Searchable
-end
